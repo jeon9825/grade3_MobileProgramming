@@ -21,7 +21,17 @@ public class MainActivity extends AppCompatActivity {
         ButtonClickListener buttonClickListener = new ButtonClickListener();
         button.setOnClickListener(buttonClickListener);
          */
+        /*
+         * 두번째 방법
         button.setOnClickListener(mButtonClickListener);
+         */
+        // 세번째 방법
+        button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"버튼눌림",Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
