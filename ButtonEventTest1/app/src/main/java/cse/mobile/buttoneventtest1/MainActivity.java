@@ -25,7 +25,11 @@ public class MainActivity extends AppCompatActivity {
          * 두번째 방법
         button.setOnClickListener(mButtonClickListener);
          */
-        // 세번째 방법
+        /*
+         * 세번째 방법
+        button.setOnClickListener(new ButtonClickListener());
+        */
+        // 네번째 방법
         button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
