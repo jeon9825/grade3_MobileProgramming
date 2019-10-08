@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         linearLayout.addView(tvHello, llParams);
 //        linearLayout.addView(btOK,llParams);
 //        linearLayout.addView(btMyButton); //addView의 default가 width=MATCH_PARENT, height=WRAP_CONTENT
-        linearLayout.addView(btMyButton,llParams); 
+        linearLayout.addView(btMyButton,llParams);
 
         setContentView(linearLayout);
     }
