@@ -14,8 +14,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
 
+public class MainActivity extends AppCompatActivity {
+    public static boolean[] selectedItems = new boolean[3]; //items의 개수와 같아야함. //초기값
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,8 +103,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
             final CharSequence[] items = {"Red", "Green", "Blue"};
-            final boolean[] checkedItems = {true, false, true}; //items의 개수와 같아야함. //초기값
-
+//            selectedItems = new ArrayList();  // Where we track the selected items
             AlertDialog.Builder adBuilder = new AlertDialog.Builder(getActivity());
             adBuilder.setTitle("색깔골라보슈~")
                     /*
@@ -120,12 +122,19 @@ public class MainActivity extends AppCompatActivity {
                         }
                     })
                      */
-                    .setMultiChoiceItems(items, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                    .setMultiChoiceItems(items, selectedItems, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
                             String str = (isChecked) ? " Checked" : " Unchecked";
                             Toast.makeText(getActivity(), items[which] + str, Toast.LENGTH_SHORT).show();
-//                            checkedItems[which] = isChecked;
+                            selectedItems[which]=isChecked;
+//                            if (isChecked) {
+//                                // If the user checked the item, add it to the selected items
+//                                selectedItems.add(which);
+//                            } else if (selectedItems.contains(which)) {
+//                                // Else, if the item is already in the array, remove it
+//                                selectedItems.remove(Integer.valueOf(which));
+//                            }
                         }
                     })
                     .setPositiveButton("Close", null)
