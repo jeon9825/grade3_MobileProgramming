@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
 //                Toast.makeText(getApplicationContext(), adapter.getItem(position), Toast.LENGTH_SHORT).show();
 
-                TextView tvFruits = view.findViewById(R.id.tvFruits);
-                Toast.makeText(getApplicationContext(), tvFruits.getText(), Toast.LENGTH_SHORT).show();
+//                TextView tvFruits = view.findViewById(R.id.tvFruits);
+//                Toast.makeText(getApplicationContext(), tvFruits.getText(), Toast.LENGTH_SHORT).show();
             }
         });
 

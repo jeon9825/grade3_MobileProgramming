@@ -70,9 +70,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info =(AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.cmenuDelete:
                 mALItems.remove(info.position);
                 mAdapter.notifyDataSetChanged();
