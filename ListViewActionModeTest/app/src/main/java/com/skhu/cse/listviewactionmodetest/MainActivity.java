@@ -4,12 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -23,7 +25,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     ArrayList<String> mALItems;
     ArrayAdapter<String> mAdapter;
-    ActionMode actionMode = null;
+    ActionMode mActionMode = null;
 
     ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
 
@@ -62,11 +64,9 @@ public class MainActivity extends AppCompatActivity {
         // Called when the user exits the action mode
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            actionMode = null;
+            mActionMode = null;
         }
     };
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,20 +79,20 @@ public class MainActivity extends AppCompatActivity {
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, alItems);  */
 
         mALItems = new ArrayList<String>();
-        ListView lvItems = findViewById(R.id.lvItems);
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mALItems);
+        final ListView lvItems = findViewById(R.id.lvItems);
+        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_multiple_choice, mALItems);
 
         lvItems.setAdapter(mAdapter);
 
         lvItems.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                if(actionMode != null) {
+                if(mActionMode != null) {
                     return false;
                 }
 
 //                mActionMode = MainActivity.this.startActionMode(mActionModeCallback);
-                actionMode = MainActivity.this.startActionMode(actionModeCallback);
+                mActionMode = MainActivity.this.startActionMode(actionModeCallback);
                 view.setSelected(true);
                 return true;
             }
@@ -108,14 +108,57 @@ public class MainActivity extends AppCompatActivity {
                 mAdapter.notifyDataSetChanged();
             }
         });
+        lvItems.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        lvItems.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+            @Override
+            public void onItemCheckedStateChanged(ActionMode actionMode, int position, long id, boolean checked) {
+            }
 
-//        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-//                Toast.makeText(getApplicationContext(), mAdapter.getItem(position), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
+            @Override
+            public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                actionMode.getMenuInflater().inflate(R.menu.cmenu_activity_main_lvitems,menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.cmenuDelete:
+                        SparseBooleanArray checkitem = lvItems.getCheckedItemPositions();   //체크된 position값을 boolean으로 맵핑
+                        for(int i=mALItems.size()-1; i>=0; i--)     //앞부터 제거시 index위치 변경된다
+                        {
+                            if(checkitem.get(i))                //해당위치 check상태 가져옴
+                                mALItems.remove(i);
+                        }
+                        lvItems.clearChoices();             //선택상태 초기화
+                        mAdapter.notifyDataSetChanged();    //갱신
+
+                        actionMode.finish();        //액션모드 종료
+                        mActionMode =null;
+                        return true;
+
+                    default:
+                        return false;
+                }
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode actionMode) {
+                mActionMode = null;
+            }
+        });
+        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Toast.makeText(getApplicationContext(), mAdapter.getItem(position), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 //        lvItems.setOnLongClickListener(new View.OnLongClickListener() {
 //            // Called when the user long-clicks on someView
 //            public boolean onLongClick(View view) {
@@ -129,5 +172,5 @@ public class MainActivity extends AppCompatActivity {
 //                return true;
 //            }
 //        });
-    }
+//  }
 }
